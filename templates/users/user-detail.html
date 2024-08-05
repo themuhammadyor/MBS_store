@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Profile|{{ request.user.username }} {% endblock %}
+{% block content %}
+    {% if user != request.user %}
+    {% if request.user.following.filter(id=user.id).exists %}
+        <form method="post" action="{% url 'unfollow_user' user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Unfollow</button>
+        </form>
+    {% else %}
+        <form method="post" action="{% url 'follow_user' user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Follow</button>
+        </form>
+    {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Your Cart</h1>
+{% if cart.items.count %}
+    <ul>
+        {% for item in cart.items.all %}
+            <li>
+                {{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }}
+                = {{ item.total_price }}
+                <form method="post" action="{% url 'update_cart' item.id %}">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                    <button type="submit">Update Quantity</button>
+                </form>
+                <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    {#    <p>Total: {{ cart.items.all|dictsort:"total_price"|sum:"total_price" }}</p>#}
+{#    <p>Total: {{ cart.items.all|dictsort:"total_price"|sum('total_price') }}</p>#}
+    {#    <div class="mx-auto"><strong>Total Number of Voters</strong> <p class="mx-3">{{$list->sum('voters')}}</p></div>#}
+
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
+</body>
+</html>
